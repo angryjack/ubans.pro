@@ -14,7 +14,7 @@
         </div>
 
         <div class="section-wrapper">
-            @auth(\App\Models\User::ROLE_ADMIN)
+            @auth(\App\Models\User::ROLE_EDITOR)
                 <div class="row">
                     <div class="col-sm-6 col-md-3 mg-b-10">
                         <a class="btn btn-warning btn-block" href="/bans/edit/{{ $model->bid }}">Редактировать</a>
@@ -54,7 +54,7 @@
                         <li class="list-group-item">
                             <p class="mg-b-0">
                                 <strong class="tx-inverse tx-medium">Дана бана</strong>
-                                <span class="text-muted">@datetime($model->ban_created)</span>
+                                <span class="text-muted">{{ $model->created }}</span>
                             </p>
                         </li>
                         <li class="list-group-item">

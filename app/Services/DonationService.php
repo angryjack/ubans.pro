@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Donation;
+use App\Models\Payment;
 
 class DonationService
 {
@@ -14,12 +15,13 @@ class DonationService
     /**
      * Добавление пожертвования после оплаты.
      *
-     * @param array $data
+     * @param Payment $payment
      * @return mixed
      * @throws \Exception
      */
-    public function addDonation(array $data)
+    public function addDonation(Payment $payment)
     {
+        $data = $payment->data;
         $requiredKeys = ['title', 'message', 'amount'];
 
         foreach ($requiredKeys as $key) {

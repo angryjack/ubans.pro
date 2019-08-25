@@ -8,6 +8,9 @@ $router->post('signup', ['as' => 'signup', 'uses' => 'SiteController@signup']);
 
 $router->get('/', ['as' => 'home', 'uses' => 'SiteController@index']);
 
+// авторизация по уникальной ссылке
+$router->get('profile/auth', 'SiteController@auth');
+
 $router->group(['prefix' => 'profile', 'middleware' => 'auth'], function () use ($router) {
     $router->get('/', ['as' => 'profile', 'uses' => 'UserController@profile']);
     $router->post('/update', ['as' => 'profile.update', 'uses' => 'UserController@updateProfile']);
@@ -16,6 +19,7 @@ $router->group(['prefix' => 'profile', 'middleware' => 'auth'], function () use 
 $router->group(['prefix' => 'payment'], function () use ($router) {
     $router->get('/', ['as' => 'payment', 'uses' => 'PaymentController@handle']);
     $router->get('/privilege', ['as' => 'payment.privilege', 'uses' => 'PaymentController@privilege']);
+    $router->get('/result', 'PaymentController@showResult');
     $router->post('/go/privilege', 'PaymentController@goPrivilege');
     $router->post('/donation', ['as' => 'payment.donation', 'uses' => 'PaymentController@donation']);
 });
@@ -25,17 +29,17 @@ $router->group(['prefix' => 'bans'], function () use ($router) {
     $router->get('/{id}', ['as' => 'bans.show', 'uses' => 'BanController@show']);
     $router->get('/edit/{id}', [
         'as' => 'bans.edit',
-        'middleware' => ['auth' ,'role:admin'],
+        'middleware' => ['auth' ,'role:'. \App\Models\User::ROLE_EDITOR],
         'uses' => 'BanController@edit'
     ]);
     $router->post('/update', [
         'as' => 'bans.update',
-        'middleware' => ['auth' ,'role:admin'],
+        'middleware' => ['auth' ,'role:'. \App\Models\User::ROLE_EDITOR],
         'uses' => 'BanController@update'
         ]);
 });
 
-$router->group(['prefix' => 'users', 'middleware' => ['auth', 'role:admin']], function () use ($router) {
+$router->group(['prefix' => 'users', 'middleware' => ['auth', 'role:' . \App\Models\User::ROLE_ADMIN]], function () use ($router) {
     $router->get('/', ['as' => 'users', 'uses' => 'UserController@index']);
     $router->get('/create', ['as' => 'users.create', 'uses' => 'UserController@create']);
     $router->get('/edit/{id}', ['as' => 'users.edit', 'uses' => 'UserController@edit']);
@@ -45,7 +49,7 @@ $router->group(['prefix' => 'users', 'middleware' => ['auth', 'role:admin']], fu
 });
 
 // управление привилегиями
-$router->group(['prefix' => 'privileges', 'middleware' => ['auth', 'role:admin']], function () use ($router) {
+$router->group(['prefix' => 'privileges', 'middleware' => ['auth', 'role:' . \App\Models\User::ROLE_ADMIN]], function () use ($router) {
     $router->get('/', ['as' => 'privileges', 'uses' => 'PrivilegeController@index']);
     $router->get('/create', ['as' => 'privileges.create', 'uses' => 'PrivilegeController@create']);
     $router->get('/edit/{id}', ['as' => 'privileges.edit', 'uses' => 'PrivilegeController@edit']);
@@ -63,4 +67,4 @@ $router->get('servers/{id}', 'ServerController@show');
 
 $router->get('donations', ['as' => 'donations', 'uses' => 'SiteController@donations']);
 
-//method=check&params[account]=userId&params[date]=2012-10-01 12:32:00&params[operator]=beeline&params[paymentType]=mc&params[projectId]=1&params[phone]=9XXXXXXXXX&params[payerSum]=10.00&params[payerCurrency]=RUB&params[signature]=9bdf52a4830779a1383ac24f1b3ed054&params[orderSum]=10.00&params[orderCurrency]=RUB&params[unitpayId]=1234567&params[test]=0
+$router->get('migrate', 'SiteController@migrate');

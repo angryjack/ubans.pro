@@ -19,7 +19,9 @@ class Payment extends Model
     public const STATUS_ERROR = 0;
 
     public const TYPE_PRIVILEGE = 'privilege';
+    //todo смена привилегии
     public const TYPE_EXTEND = 'extend';
+    public const TYPE_PROLONG = 'prolong';
     public const TYPE_DONATION = 'donation';
 
     protected $fillable = [

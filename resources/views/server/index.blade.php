@@ -14,7 +14,7 @@
 
         <div class="row">
             @foreach($list as $server)
-                <div class="col-lg-6">
+                <div class="col-lg-6 mb-4">
                     <div class="card card-profile">
                         <div class="card-body">
                             <div class="media">

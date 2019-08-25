@@ -19,10 +19,10 @@
                         <a class="btn btn-teal btn-block" href="{{ route('users.create') }}">Добавить</a>
                     </div>
                     <div class="col-sm-6 col-md-3 mg-b-10 mg-l-auto">
-                        <input class="form-control" placeholder="Поиск" type="text">
+                        <input class="form-control users-search" placeholder="Поиск" type="text">
                     </div>
                 </div>
-                <table class="table">
+                <table class="table data-users">
                     <thead>
                     <tr>
                         <th>Логин</th>

@@ -81,8 +81,9 @@ class User extends Model implements Authenticatable
      * @param $role
      * @return bool
      */
-    public function hasRole($role){
-        return $this->role === $role;
+    public function hasRole($role) {
+        // для владельца доступно все
+        return $this->role === self::ROLE_OWNER || $this->role === $role;
     }
 
     /**

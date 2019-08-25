@@ -87,4 +87,9 @@ class Ban extends Model
         return $isActive;
 
     }
+
+    public function getCreatedAttribute()
+    {
+        return date('d.m.Y H:i', $this->ban_created);
+    }
 }

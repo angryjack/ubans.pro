@@ -32,7 +32,7 @@
                 </div><!-- form-group -->
                 <span class="do-login btn btn-primary btn-block btn-signin">Войти</span>
             </form>
-            <p class="mg-b-0">Нет аккаунта? <a href="{{ route('signup') }}">Пройдите регистрацию</a></p>
+            {{--<p class="mg-b-0">Нет аккаунта? <a href="{{ route('signup') }}">Пройдите регистрацию</a></p>--}}
         </div>
 
     </div>
@@ -40,11 +40,13 @@
         <div class="signin-box">
             <h2 class="slim-logo"><a href="{{ route('home') }}">{{ env('APP_NAME') }}<span>.</span></a></h2>
 
-            <p>We are excited to launch our new company and product Slim. After being featured in too many magazines to
-                mention and having created an online stir, we know that ThemePixels is going to be big. We also hope to
-                win Startup Fictional Business of the Year this year.</p>
-
-            <p>Browse our site and see for yourself why you need Slim.</p>
+            <p>Игровое сообщество посвященное игре Counter Strike 1.6</p>
+            <p>Наши сервера:</p>
+            <p>Суровая Нереальность <b>46.174.55.18:27015</b> <br>
+                Полигон Смерти <b>46.174.54.230:27015</b> <br>
+            Жара <b>46.174.54.105:27015</b></p>
+            <p>Мы существуем с 2014 года и за это время у нас сложился большой и дружный коллектив.
+                Присоединяйтесь к нам и вы не пожалеете!</p>
 
             <p><a href="{{ route('home') }}" class="btn btn-outline-secondary pd-x-25">Подробнее</a></p>
 

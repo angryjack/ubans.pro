@@ -18,4 +18,11 @@ class Donation extends Model
         'message',
         'amount'
     ];
+
+    public function getCreatedAttribute()
+    {
+        if ($this->created_at !== null) {
+            return $this->created_at->format('d.m.Y H:i');
+        }
+    }
 }

@@ -8,7 +8,6 @@ use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class PaymentService
@@ -42,7 +41,10 @@ class PaymentService
 
         $rate = PrivilegeRate::find($request->input('rate'));
 
-        // если пользователь авторизирован, разрешаем покупку и продления только по его данным.
+        // определяем тип покупки
+        $paymentType = Payment::TYPE_PRIVILEGE;
+
+        // если пользователь авторизирован, разрешаем покупку и продление только по его данным.
         $user = $this->userService->getUserByAuth();
         if ($user === null) {
             $email = $request->input('email');
@@ -53,11 +55,15 @@ class PaymentService
 
             //todo проверка что пользователь не имеет других привилегий на этом сервере
             $activePrivilege = $user->servers()->where('id', $rate->privilege->server->id)->first();
-            if ($activePrivilege->pivot->custom_flags !== $rate->privilege->flags) {
-                throw new UnprocessableEntityHttpException('Нельзя купить несколько привилегий на одном сервере.');
-            }
-            if ($activePrivilege->pivot->expire === null) {
-                throw new UnprocessableEntityHttpException('Нельзя продлить привилегию которая была приобретена навсегда.');
+            if ($activePrivilege) {
+                if ($activePrivilege->pivot->custom_flags !== $rate->privilege->flags) {
+                    throw new UnprocessableEntityHttpException('Нельзя купить несколько привилегий на одном сервере.');
+                }
+                if ($activePrivilege->pivot->expire === null) {
+                    throw new UnprocessableEntityHttpException('Нельзя продлить привилегию которая была приобретена навсегда.');
+                }
+                // привилегия найдена и флаги совпадают - продление
+                $paymentType = Payment::TYPE_PROLONG;
             }
         }
 
@@ -68,17 +74,27 @@ class PaymentService
         ];
 
         $payment = Payment::create([
-            'type' => Payment::TYPE_PRIVILEGE,
+            'type' => $paymentType,
             'data' => $data,
             'amount' => $rate->price,
             'account' => 'PRIVILEGE-' . Str::random(9),
         ]);
 
-        $message = 'Buy privilege on ' . env('APP_NAME');
+        if ($paymentType === Payment::TYPE_PRIVILEGE) {
+            $message = 'Покупка привилегии на ' . env('APP_NAME');
+        } else {
+            $message = 'Продление привилегии на ' . env('APP_NAME');
+        }
 
         return $this->getPaymentUrl($payment, $message);
     }
 
+    /**
+     * Возвращает ссылку на оплату пожертвования.
+     *
+     * @param Request $request
+     * @return string
+     */
     public function makeDonation(Request $request)
     {
         $amount = (int)$request->input('amount');
@@ -139,14 +155,14 @@ class PaymentService
 
                 switch ($payment->type) {
                     case Payment::TYPE_PRIVILEGE:
-                        $this->userService->addPrivilege($payment->data);
+                        $this->userService->addPrivilege($payment);
                         break;
-                    case Payment::TYPE_EXTEND:
-                        //todo продление привилегии
-                        // реализовано через добавление (возможно в будущем понадобится поменять)
+                    //case Payment::TYPE_EXTEND:
+                    case Payment::TYPE_PROLONG:
+                        $this->userService->prolongPrivilege($payment);
                         break;
                     case Payment::TYPE_DONATION:
-                        $this->donationService->addDonation($payment->data);
+                        $this->donationService->addDonation($payment);
                         break;
                 }
                 $response = 'Оплата произведена. Большое спасибо!';
@@ -178,6 +194,20 @@ class PaymentService
     }
 
     /**
+     * Возвращает платеж по идентификатору и акаунту.
+     *
+     * @param Request $request
+     * @return mixed
+     */
+    public function getPaymentByIdAndAccount(Request $request)
+    {
+        return Payment::where([
+            ['payment_id', $request->input('paymentId')],
+            ['account', $request->input('account')],
+        ])->firstOrFail();
+    }
+
+    /**
      * Проверяет корректность данных заказа.
      *
      * @param Payment $payment
@@ -186,8 +216,6 @@ class PaymentService
      */
     private function checkOrderData(Payment $payment, array $params)
     {
-        return;
-
         if ($payment->status === Payment::STATUS_CHECK) {
             if ($params['orderSum'] !== $payment->amount ||
                 $params['account'] !== $payment->account ||

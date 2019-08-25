@@ -27,6 +27,7 @@ class CreateServerinfoTable extends Migration
             $table->integer('reasons')->nullable();
             $table->integer('timezone_fixx')->default(0);
             $table->text('description')->nullable();
+            $table->text('rules')->nullable();
 
         });
     }

@@ -13,10 +13,10 @@ $('.make-donation').on('click', function (e) {
             message: message,
         },
         success: function (response) {
-            //window.location.href = '/';
+            window.location.href = response.url;
         },
         error: function () {
-            //window.location.reload();
+            window.location.reload();
         }
     });
 });

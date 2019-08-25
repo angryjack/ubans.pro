@@ -16,10 +16,10 @@
             <div class="table-responsive">
                 <div class="row">
                     <div class="col-sm-6 col-md-3 mg-b-10 mg-l-auto">
-                        <input class="form-control" placeholder="Поиск" type="text">
+                        <input class="form-control bans-search" placeholder="Поиск" type="text">
                     </div>
                 </div>
-                <table class="table">
+                <table class="table data-bans">
                     <thead>
                     <tr>
                         <th>Дата</th>
@@ -33,7 +33,7 @@
                     @forelse($list as $ban)
                         <tr @if(!$ban->is_active) class="table table-teal" @endif
                         onclick="window.location.href='{{ route('bans.show', ['id' => $ban->bid]) }}'">
-                            <th scope="row">@datetime($ban->ban_created)</th>
+                            <th scope="row">{{ $ban->created }}</th>
                             <td>{{ $ban->player_nick }}</td>
                             <td>{{ $ban->ban_reason }}</td>
                             <td>{{ $ban->admin_nick }}</td>

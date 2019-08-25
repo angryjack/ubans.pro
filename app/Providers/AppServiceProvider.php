@@ -19,17 +19,6 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        Blade::directive('datetime', function ($expression) {
-            $template = '';
-            if (is_int($expression)){
-                $template = "<?= date('d.m.y H:i', $expression); ?>";
-            } else {
-                $expression = strtotime($expression);
-                $template = "<?= date('d.m.y H:i', $expression); ?>";
-            }
-            return $template;
-        });
-
         Blade::directive('auth', function ($expression) {
             if ($expression) {
                 $template = "<?php if(Auth::user() && Auth::user()->hasRole($expression)) : ?>";
@@ -44,6 +33,16 @@ class AppServiceProvider extends ServiceProvider
                 $template = "<?php if(!Auth::user() || !Auth::user()->hasRole($expression)) : ?>";
             } else {
                 $template = '<?php if(!Auth::user()) : ?>';
+            }
+            return $template;
+        });
+
+        Blade::directive('dt', function ($expression) {
+            if (is_int($expression)){
+                $template = "<?= date('d.m.y H:i', $expression); ?>";
+            } else {
+                $expression = strtotime($expression);
+                $template = "<?= date('d.m.y H:i', $expression); ?>";
             }
             return $template;
         });

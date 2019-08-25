@@ -21,7 +21,7 @@ $('.extend-privilege').on('click', function () {
             rate: rate,
         },
         success: (response) => {
-            console.log('ok');
+            window.location.href = response.url;
         },
     });
 });
@@ -35,7 +35,7 @@ $('.do-update').on('click', function () {
             password: $profilePassword.val()
         },
         success: (response) => {
-            window.location.href = response;
+            window.location.reload();
         },
         error: (response) => {
             if (response.responseJSON.nickname) {

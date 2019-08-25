@@ -36,7 +36,7 @@
                             <li class="list-group-item">
                                 <p class="mg-b-0">
                                     <strong class="tx-inverse tx-medium">Дана бана</strong>
-                                    <span class="text-muted">@datetime($model->ban_created)</span>
+                                    <span class="text-muted">{{ $model->created }}</span>
                                 </p>
                             </li>
                             <li class="list-group-item">

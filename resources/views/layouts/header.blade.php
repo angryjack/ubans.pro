@@ -8,7 +8,7 @@
         <div class="slim-header-right">
             <div class="dropdown dropdown-c">
                 <a href="#" class="logged-user" data-toggle="dropdown">
-                    <img src="http://via.placeholder.com/500x500" alt="">
+                    <img src="https://via.placeholder.com/500x500" alt="">
                     <span>
                         @auth
                             {{ Auth::user()->nickname }}

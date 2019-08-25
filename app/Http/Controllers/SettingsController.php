@@ -7,7 +7,7 @@ use App\Services\SiteService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 
-class SiteController extends Controller
+class SettingsController extends Controller
 {
     /**
      * @var SiteService

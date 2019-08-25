@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePrivilegesTable extends Migration
+class CreateSettingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreatePrivilegesTable extends Migration
      */
     public function up()
     {
-        Schema::create('privileges', function (Blueprint $table) {
+        Schema::create('settings', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('server_id');
+            $table->string('key', 191);
             $table->string('title', 191);
-            $table->text('description')->nullable();
-            $table->text('instruction')->nullable();
-            $table->string('flags', 191);
-            $table->unique(['server_id', 'flags']);
+            $table->text('value');
+            $table->integer('type')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -31,6 +30,6 @@ class CreatePrivilegesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('privileges');
+        Schema::dropIfExists('settings');
     }
 }

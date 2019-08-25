@@ -9,7 +9,7 @@
                 <div class="card card-profile">
                     <div class="card-body">
                         <div class="media">
-                            <img src="http://via.placeholder.com/500x500" alt="">
+                            <img src="https://via.placeholder.com/500x500" alt="">
                             <div class="media-body">
                                 <h3 class="card-profile-name">{{ $model->nickname }}</h3>
                                 <p>{{ $model->email }}</p>
@@ -23,6 +23,8 @@
                             <div class="card card-info">
                                 <div class="card-body pd-40 server-{{ $privilege['server']->id }}">
                                     <h5 class="tx-inverse mg-b-20">{{ $privilege['server']->hostname }}</h5>
+                                    <input type="hidden" name="name" value="{{ $model->steamid }}">
+                                    <input type="hidden" name="email" value="{{ $model->email }}">
                                     @if($privilege['privilege'])
                                         <p class="tx-18">{{ $privilege['privilege']->title }}</p>
                                         <p>Действует до: <b>{{ $privilege['expire'] }}</b></p>

@@ -21,6 +21,19 @@ class SiteService
         return new Cookie('token', $this->jwt($user), '+30 days');
     }
 
+    public function signInByAuthKey(Request $request)
+    {
+        $key = $request->input('key');
+
+        $user = User::where('auth_key', $key)->first();
+
+        if (!$user) {
+            throw new \Exception('Уникальная ссылка недействительна.');
+        }
+
+        return new Cookie('token', $this->jwt($user), '+30 days');
+    }
+
     public function dropUserCookie()
     {
         return new Cookie('token', null);

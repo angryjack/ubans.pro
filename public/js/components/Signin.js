@@ -24,7 +24,7 @@ $('.do-login').on('click', function () {
             password: password
         },
         success: function (response) {
-            window.location.href = '/';
+            window.location.href = '/profile';
         },
         error: function () {
             addErrors('Логин или пароль указан неверно.');

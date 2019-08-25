@@ -18,7 +18,7 @@ class CreateAdminsServersTable extends Migration
             $table->unsignedInteger('server_id')->default(0);
             $table->string('custom_flags', 32)->default('yes');
             $table->enum('use_static_bantime', ['yes', 'no'])->default('yes');
-            $table->timestamp('expire')->useCurrent()->comment('срок истечения админов');
+            $table->timestamp('expire')->nullable()->comment('срок истечения админов');
             $table->unique(['admin_id', 'server_id']);
         });
     }

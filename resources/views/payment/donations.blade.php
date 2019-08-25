@@ -29,7 +29,7 @@
                     <h6 class="slim-card-title tx-sm-20">{{ $donation->title }}</h6>
                     <p>{{ $donation->message }}</p>
                     <p class="tx-teal tx-sm-26">{{ $donation->amount }} ₽</p>
-                    <p class="blog-date text-right mb-0">@datetime($donation->created_at)</p>
+                    <p class="blog-date text-right mb-0">{{ $donation->created }}</p>
                 </div>
             @endforeach
         </div>

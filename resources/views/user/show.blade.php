@@ -39,7 +39,7 @@
                         </li>
                         <li class="list-group-item">
                             <p class="mg-b-0"><strong class="tx-inverse tx-medium">Уникальная ссылка</strong>
-                                <span class="text-muted">{{ $model->auth_key }}</span>
+                                <span class="text-muted">{{ env('APP_URL') . '/profile/auth?key=' . $model->auth_key }}</span>
                             </p>
                         </li>
 
@@ -82,7 +82,7 @@
 
                                 @if(!empty($server->pivot->expire))
                                     <p class="tx-semibold mb-0">Истекает</p>
-                                    @datetime($server->pivot->expire)
+                                    @php echo date('d.m.Y H:i', strtotime($server->pivot->expire)); @endphp
                                 @endif
 
                             </div>
