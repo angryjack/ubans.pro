@@ -7,3 +7,7 @@ var User = {
         $authInput.val(randomKey);
     }
 }
+
+$('.refresh-key').on('click', function () {
+    User.generateAuthKey();
+});

@@ -16,6 +16,14 @@
                             </div>
                         </div>
                     </div>
+                    <div class="bd-l bd-3 bd-danger bg-gray-200 pd-x-20 pd-y-25">
+                        <h5 class="tx-danger">Не получается войти на сервер? Обновите пароль!</h5>
+                        <p class="mg-b-0">На сайте нужно вводить пароль <b>БЕЗ приставки setinfo _pw</b></p>
+                        <p class="mg-b-0">После того, как поменяли пароль на сайте, необходимо подождать 3 минуты и
+                            ввести в кс новый пароль <b>(в кс нужно вводить с приставкой)</b>: setinfo _pw новыйПароль
+                        </p>
+                        <p class="mg-b-0">Смена пароля произойдет в течение 3-х минут! </p>
+                    </div>
                 </div>
                 <div class="row row-sm">
                     @forelse($model->privileges as $privilege)
@@ -104,7 +112,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-control-label">Новый пароль</label>
+                            <label class="form-control-label">Новый пароль (Вводить без setinfo _pw)</label>
                             <input type="text" name="password" class="form-control">
                             <p class="errors parsley-errors-list mt-2"></p>
                         </div>

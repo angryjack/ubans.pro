@@ -239,16 +239,13 @@ class UserService
         $this->validate($request, $validationRules);
 
         // binding values
-        $model->days = 0;
-        $model->expired = 0;
-
-        if (!$model->username) {
-            $model->username = $model->nickname;
-        }
-
         $model->fill($request->all());
 
-        $password = $request->input('password', '');
+        $model->days = 0;
+        $model->expired = 0;
+        $model->username = $model->nickname;
+
+        $password = trim($request->input('password', ''));
         if (!empty($password)) {
             $model->password = md5($password);
         }
@@ -263,9 +260,15 @@ class UserService
             if (empty($params['expire'])) {
                 continue;
             }
+            if (isset($params['forever'])) {
+                $expire = null;
+            } else {
+                $expire = date('Y-m-d H:i:s', strtotime($params['expire']));
+            }
+
             $privilegesOnServers[$serverId] = [
                 'custom_flags' => $params['custom_flags'],
-                'expire' => date('Y-m-d H:i:s', strtotime($params['expire'])),
+                'expire' => $expire,
             ];
         }
 

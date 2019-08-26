@@ -43,6 +43,7 @@ class PaymentService
 
         // определяем тип покупки
         $paymentType = Payment::TYPE_PRIVILEGE;
+        $accountPrefix = 'PRIVILEGE';
 
         // если пользователь авторизирован, разрешаем покупку и продление только по его данным.
         $user = $this->userService->getUserByAuth();
@@ -64,6 +65,7 @@ class PaymentService
                 }
                 // привилегия найдена и флаги совпадают - продление
                 $paymentType = Payment::TYPE_PROLONG;
+                $accountPrefix = 'PROLONG';
             }
         }
 
@@ -77,7 +79,7 @@ class PaymentService
             'type' => $paymentType,
             'data' => $data,
             'amount' => $rate->price,
-            'account' => 'PRIVILEGE-' . Str::random(9),
+            'account' => $accountPrefix . '-' . Str::random(9),
         ]);
 
         if ($paymentType === Payment::TYPE_PRIVILEGE) {
@@ -119,7 +121,7 @@ class PaymentService
             'account' => 'DONATION-' . Str::random(9),
         ]);
 
-        $message = 'Donation for ' . env('APP_NAME');
+        $message = 'Пожертвование для ' . env('APP_NAME');
 
         return $this->getPaymentUrl($payment, $message);
     }

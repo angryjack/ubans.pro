@@ -45,12 +45,11 @@
                 <label class="form-control-label">Уникальная ссылка: <span class="tx-danger">*</span></label>
 
                 <div class="input-group">
-                    <div class="input-group-prepend">
+                    <div class="input-group-prepend refresh-key">
                         <span class="input-group-text"><i class="icon ion-refresh tx-16 lh-0 op-6"></i></span>
                     </div>
                     <input class="form-control" type="text" name="auth_key" placeholder="Укажите ссылку"
-                           value="{{ $form->user->auth_key ?? \Illuminate\Support\Str::random(15) }}"
-                           disabled>
+                           value="{{ $form->user->auth_key ?? \Illuminate\Support\Str::random(25) }}" readonly>
                 </div>
             </div>
         </div>
@@ -120,13 +119,28 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-control-label">Срок:</label>
+                                <label class="ckbox">
+                                    <input type="checkbox"
+                                           name="servers[{{ $server->id }}][forever]"
+                                           onclick="if($(this).prop('checked')) {
+                                               $('.cl-{{ $server->id }}').hide();
+                                               } else {
+                                               $('.cl-{{ $server->id }}').show();
+                                               }"
+                                           @if($server->pivot && $server->pivot->getOriginal('expire') === null) checked @endif
+                                    >
+                                    <span>Навсегда</span>
+                                </label>
 
-                                <div class="input-group">
+                                <div class="input-group cl-{{ $server->id }}"
+                                     @if($server->pivot && $server->pivot->getOriginal('expire') === null) style="display: none;" @endif
+                                >
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
                                             <i class="icon ion-calendar tx-16 lh-0 op-6"></i>
                                         </div>
                                     </div>
+
                                     <input type="text" class="form-control fc-datepicker" placeholder="ДД-ММ-ГГГГ"
                                            name="servers[{{ $server->id }}][expire]"
                                            @if($server->pivot)
