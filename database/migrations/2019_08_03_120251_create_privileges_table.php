@@ -20,6 +20,7 @@ class CreatePrivilegesTable extends Migration
             $table->text('description')->nullable();
             $table->text('instruction')->nullable();
             $table->string('flags', 191);
+            $table->integer('status')->default(1);
             $table->unique(['server_id', 'flags']);
         });
     }

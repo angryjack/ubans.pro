@@ -6,13 +6,11 @@
     <title>@yield('title')</title>
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    <link href="/lib/font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="/lib/Ionicons/css/ionicons.css" rel="stylesheet">
-
-    <link href="/lib/select2/css/select2.min.css" rel="stylesheet">
-    <link href="/lib/jquery.steps/css/jquery.steps.css" rel="stylesheet">
-    <link href="/lib/datatables/css/jquery.dataTables.css" rel="stylesheet">
-
+    <link href="/css/libs/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/libs/Ionicons/css/ionicons.css" rel="stylesheet">
+    <link href="/css/libs/select2/css/select2.min.css" rel="stylesheet">
+    <link href="/css/libs/jquery.steps/css/jquery.steps.css" rel="stylesheet">
+    <link href="/css/libs/datatables/css/jquery.dataTables.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/slim.min.css">
     @if(env('THEME_BLACK'))
         <link rel="stylesheet" href="/css/slim.one.css">
@@ -35,13 +33,14 @@
 <script src="/js/libs/jquery.js"></script>
 <script src="/js/libs/popper.js"></script>
 <script src="/js/libs/bootstrap.min.js"></script>
-<script src="/lib/select2/js/select2.min.js"></script>
-<script src="/lib/jquery-ui/js/jquery-ui.js"></script>
-<script src="/lib/moment/js/moment.js"></script>
-<script src="/lib/bootstrap-tagsinput/js/bootstrap-tagsinput.js"></script>
-<script src="/lib/jquery.steps/js/jquery.steps.js"></script>
-<script src="/lib/parsleyjs/js/parsley.js"></script>
-<script src="/lib/parsleyjs/js/ru.js"></script>
+<script src="/js/libs/select2.min.js"></script>
+<script src="/js/libs/jquery-ui.js"></script>
+<script src="/js/libs/moment.js"></script>
+<script src="/js/libs/bootstrap-tagsinput.js"></script>
+<script src="/js/libs/jquery.steps.js"></script>
+<script src="/js/libs/parsley.js"></script>
+<script src="/js/libs/ru.js"></script>
+
 <script src="/js/components/BuyPrivilege.js"></script>
 <script src="/js/components/Signin.js"></script>
 <script src="/js/components/User.js"></script>

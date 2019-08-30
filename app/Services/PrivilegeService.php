@@ -34,7 +34,7 @@ class PrivilegeService
 
     public function getServerPrivileges(Server $server)
     {
-        return $server->privileges;
+        return $server->privileges()->where('status', 1)->get();
     }
 
     public function getRates(Privilege $privilege)
@@ -57,6 +57,7 @@ class PrivilegeService
             $model = new Privilege();
         }
 
+        $model->status = 0;
         $model->fill($request->all());
         $model->save();
 

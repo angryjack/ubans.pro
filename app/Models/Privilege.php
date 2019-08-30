@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property $server_id
  * @property $description
  * @property $server
+ * @property $status
+ *
  * @property $rates
  */
 class Privilege extends Model
@@ -22,6 +24,7 @@ class Privilege extends Model
         'server_id',
         'title',
         'description',
+        'status',
         'flags',
     ];
 

@@ -30,6 +30,16 @@
             </div>
 
             <div class="form-group">
+                <label class="ckbox">
+                    <input type="checkbox" name="status"
+                           value="1"
+                           @if ($model->status === 1) checked @endif
+                    >
+                    <span>Доступно для покупки</span>
+                </label>
+            </div>
+
+            <div class="form-group">
                 <label class="section-title">Тарифы</label>
                 <p>Срок - стоимость. Пример: <b>30-199</b> (30 дней за 199 руб)
                     <b>Навсегда = 0</b>
