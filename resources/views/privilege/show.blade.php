@@ -12,44 +12,72 @@
             </ol>
             <h6 class="slim-pagetitle">@yield('title')</h6>
         </div>
-        <div class="section-wrapper">
-            @auth('admin')
-                <div class="row">
-                    <div class="col-sm-6 col-md-3 mg-b-10">
+        <div class="row row-sm">
+            <div class="col-lg-8">
+                <div class="card-recommendation" id="about">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-profile-name">{{ $model->title }}</h3>
+                            <p class="card-profile-position">Сервер: <a
+                                    href="/server/{{ $model->server->id }}">{{ $model->server->hostname }}</a></p>
+                            <p>Доступ: <b>{{ $model->flags }}</b></p>
+                            <hr>
+                            <p class="mg-b-0">{!! Michelf\Markdown::defaultTransform($model->description) !!}</p>
+
+                        </div><!-- card-body -->
+                    </div>
+                </div>
+
+                <div class="card-recommendation mt-4" id="instruction">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-profile-name">Инструкции</h3>
+                            <hr>
+                            <p class="mg-b-0">{!! Michelf\Markdown::defaultTransform($model->instruction) !!}</p>
+
+                        </div><!-- card-body -->
+                    </div>
+                </div>
+
+                <div class="card-recommendation mt-4" id="rules">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-profile-name">Правила игры на сервере {{ $model->server->hostname }}</h3>
+                            <hr>
+                            <p class="mg-b-0">{!! Michelf\Markdown::defaultTransform($model->server->rules) !!}</p>
+
+                        </div><!-- card-body -->
+                    </div>
+                </div>
+            </div><!-- col-8 -->
+
+            <div class="col-lg-4 mg-t-20 mg-lg-t-0">
+                @auth('admin')
+                    <div class="card pd-25 mb-4">
+
                         <a class="btn btn-warning btn-block"
                            href="{{ route('privileges.edit', ['id' => $model->id]) }}">Редактировать</a>
                     </div>
-                </div>
-            @endif
-            <div class="row">
-                <div class="col-md-6 col-lg-4">
-                    <ul class="list-group mb-3">
-                        <li class="list-group-item">
-                            <p class="mg-b-0"><strong class="tx-inverse tx-medium">Название</strong>
-                                <span class="text-muted">{{ $model->title }}</span>
-                            </p>
-                        </li>
-                        <li class="list-group-item">
-                            <p class="mg-b-0"><strong class="tx-inverse tx-medium">Сервер</strong>
-                                <span class="text-muted">{{ $model->server->hostname }}</span>
-                            </p>
-                        </li>
-                        <li class="list-group-item">
-                            <p class="mg-b-0"><strong class="tx-inverse tx-medium">Доступ</strong>
-                                <span class="text-muted">{{ $model->flags }}</span>
-                            </p>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-md-6 col-lg-8">
-                    <ul class="list-group mb-3">
-                        <li class="list-group-item">
-                            <span class="text-muted">{!! $model->description !!}</span>
-                        </li>
-                    </ul>
+                @endif
+                <div class="card card-connection">
+                    @forelse($model->rates as $rate)
+                        <div class="row row-xs">
+                            <div class="col-4 @if($loop->even) tx-primary @else tx-purple @endif">
+                                {{ $rate->price }}
+                            </div>
+                            <div class="col-8">
+                                <p class="m-0">Рублей</p>
+                                Сроком @if($rate->term === 0) навсегда @else на {{ $rate->term }} дней @endif
+                            </div>
+                        </div><!-- row -->
+                        @if (!$loop->last)
+                            <hr>
+                        @endif
+                    @empty
+                        Тарифов нет.
+                    @endforelse
                 </div>
             </div>
         </div>
-
     </div>
 @endsection

@@ -36,7 +36,7 @@ class PaymentController extends Controller
 
     public function privilege()
     {
-        $servers = $this->serverService->getWithPrivileges();
+        $servers = $this->serverService->getAllWithPrivileges();
         return view('payment.privilege', compact('servers'));
     }
 

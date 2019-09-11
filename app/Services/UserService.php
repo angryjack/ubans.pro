@@ -131,7 +131,7 @@ class UserService
             'expire' => $expire
         ]);
 
-        Mail::to($user->email)->send(new BuyPrivilege($user));
+        Mail::to($user->email)->send(new BuyPrivilege($user, $rate->privilege));
 
         return $user;
     }

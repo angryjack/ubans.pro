@@ -4,6 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Server
+ * @package App\Models
+ * @property $id
+ * @property $timestamp
+ * @property $hostname
+ * @property $address
+ * @property $gametype
+ * @property $rcon
+ * @property $amxban_version
+ * @property $amxban_motd
+ * @property $motd_delay
+ * @property $amxban_menu
+ * @property $reasons
+ * @property $timezone_fixx
+ * @property $description
+ * @property $rules
+ */
 class Server extends Model
 {
     public $timestamps = false;
@@ -23,7 +41,8 @@ class Server extends Model
         'amxban_menu',
         'reasons',
         'timezone_fixx',
-        'description'
+        'description',
+        'rules'
     ];
 
     public function users()

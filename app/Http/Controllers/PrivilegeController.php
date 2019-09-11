@@ -58,15 +58,13 @@ class PrivilegeController extends Controller
 
     public function server($id)
     {
-        $server = $this->serverService->getById($id);
-        $content = $server->description;
-        $privileges = $this->privilegeService->getServerPrivileges($server);
-
-        return response()->json(['privileges' => $privileges, 'content' => $content]);
+        $server = $this->serverService->getByIdWithPrivileges($id);
+        return response()->json(compact('server'));
     }
 
     public function privilege($id)
     {
+        //todo выпилить, обрабатывать на фронте пришедшую ранее информацию.
         $privilege = $this->privilegeService->getById($id);
         $content = $privilege->description;
         $terms = $this->privilegeService->getRates($privilege);

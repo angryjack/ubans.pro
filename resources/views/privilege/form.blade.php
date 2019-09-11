@@ -52,7 +52,11 @@
         <div class="col-md-6 col-lg-8">
             <div class="form-group">
                 <label class="form-control-label">Описание:</label>
-                <textarea name="description" rows="16" class="form-control">{{ $model->description }}</textarea>
+                <textarea name="description" rows="16" class="form-control editor">{{ $model->description }}</textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-control-label">Инструкции:</label>
+                <textarea name="instruction" rows="16" class="form-control editor">{{ $model->instruction }}</textarea>
             </div>
         </div>
     </div>

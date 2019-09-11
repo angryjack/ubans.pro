@@ -2,80 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\DonationService;
-use App\Services\SiteService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
+use App\Services\SettingsService;
 
 class SettingsController extends Controller
 {
     /**
-     * @var SiteService
+     * @var SettingsService
      */
-    private $siteService;
-    /**
-     * @var DonationService
-     */
-    private $donationService;
+    private $settingsService;
 
-    public function __construct(SiteService $siteService, DonationService $donationService)
+    public function __construct(SettingsService $settingsService)
     {
-        $this->siteService = $siteService;
-        $this->donationService = $donationService;
+        $this->settingsService = $settingsService;
     }
 
-    public function signinPage()
+    public function index()
     {
-        return view('site.signin');
-    }
-
-    public function signin(Request $request)
-    {
-        try {
-            $cookie = $this->siteService->getSigninCookie($request);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ], 400);
-        }
-
-        return redirect()->route('bans')->withCookie($cookie);
-    }
-
-    public function signout()
-    {
-        $cookie = $this->siteService->dropUserCookie();
-        return redirect()->route('bans')->withCookie($cookie);
-    }
-
-    public function auth(Request $request)
-    {
-        try {
-            $cookie = $this->siteService->signInByAuthKey($request);
-            return redirect()->route('profile')->withCookie($cookie);
-        } catch (\Exception $e) {
-            return redirect()->route('signin');
-        }
-    }
-
-    public function index(Request $request)
-    {
-        return view('site.index');
-    }
-
-    public function donations()
-    {
-        $donations = $this->donationService->getList();
-        return view('payment.donations', compact('donations'));
-    }
-
-    public function migrate()
-    {
-        if (env('APP_DEBUG')) {
-            Artisan::call('migrate:fresh --seed');
-            die('Операция успешно выполнена.');
-        } else {
-            die('nothing do here.');
-        }
+        return view('settings.index');
     }
 }

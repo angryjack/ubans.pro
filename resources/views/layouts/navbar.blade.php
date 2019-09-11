@@ -68,14 +68,6 @@
                     @endif
                 </li>
             @endforeach
-            @guest
-                <li class="nav-item">
-                    <a class="nav-link" href="//download-cs.net" target="_blank">
-                        <i class="icon ion-ios-download-outline"></i>
-                        <span>Скачать CS</span>
-                    </a>
-                </li>
-            @endif
         </ul>
     </div>
 </div>

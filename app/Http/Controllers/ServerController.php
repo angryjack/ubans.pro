@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Server;
 use App\Services\ServerService;
 use Illuminate\Http\Request;
 
@@ -18,32 +17,40 @@ class ServerController extends Controller
         $this->serverService = $serverService;
     }
 
+    /**
+     * Список серверов.
+     */
     public function index()
     {
-        $list = $this->serverService->getWithInformation();
-
+        $list = $this->serverService->getAllWithInformation();
         return view('server.index', compact('list'));
     }
 
+    /**
+     * Конкретный сервер.
+     */
     public function show($id)
     {
-        $model = $this->serverService->getById($id);
-
+        $server = $this->serverService->getById($id);
+        $model = $this->serverService->getWithInformation($server);
         return view('server.show', compact('model'));
     }
 
+    /**
+     * Форма редактирования.
+     */
     public function edit($id)
     {
         $model = $this->serverService->getById($id);
-
-        return view('ban.edit', compact('model'));
+        return view('server.edit', compact('model'));
     }
 
-    public function update(Request $request)
+    /**
+     * Форма редактирования информации о сервере.
+     */
+    public function store(Request $request)
     {
-        $model = $this->serverService->getById($request->input('bid'));
-        $this->serverService->update($model, $request);
-
+        $model = $this->serverService->store($request);
         return redirect()->route('server.show', ['id' => $model->id]);
     }
 }

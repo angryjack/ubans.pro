@@ -11,6 +11,7 @@
     <link href="/css/libs/select2/css/select2.min.css" rel="stylesheet">
     <link href="/css/libs/jquery.steps/css/jquery.steps.css" rel="stylesheet">
     <link href="/css/libs/datatables/css/jquery.dataTables.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
     <link rel="stylesheet" href="/css/slim.min.css">
     @if(env('THEME_BLACK'))
         <link rel="stylesheet" href="/css/slim.one.css">
@@ -49,7 +50,7 @@
 <script src="/js/components/Bans.js"></script>
 <script src="/js/components/Users.js"></script>
 <script src="/js/dashboard.js"></script>
-
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 <script type="text/javascript" src="https://vk.com/js/api/openapi.js?162"></script>
 
 <!-- VK Widget -->

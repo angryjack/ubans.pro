@@ -29,14 +29,14 @@ $router->group(['prefix' => 'bans'], function () use ($router) {
     $router->get('/{id}', ['as' => 'bans.show', 'uses' => 'BanController@show']);
     $router->get('/edit/{id}', [
         'as' => 'bans.edit',
-        'middleware' => ['auth' ,'role:'. \App\Models\User::ROLE_EDITOR],
+        'middleware' => ['auth', 'role:' . \App\Models\User::ROLE_EDITOR],
         'uses' => 'BanController@edit'
     ]);
     $router->post('/update', [
         'as' => 'bans.update',
-        'middleware' => ['auth' ,'role:'. \App\Models\User::ROLE_EDITOR],
+        'middleware' => ['auth', 'role:' . \App\Models\User::ROLE_EDITOR],
         'uses' => 'BanController@update'
-        ]);
+    ]);
 });
 
 $router->group(['prefix' => 'users', 'middleware' => ['auth', 'role:' . \App\Models\User::ROLE_ADMIN]], function () use ($router) {
@@ -53,18 +53,33 @@ $router->group(['prefix' => 'privileges', 'middleware' => ['auth', 'role:' . \Ap
     $router->get('/', ['as' => 'privileges', 'uses' => 'PrivilegeController@index']);
     $router->get('/create', ['as' => 'privileges.create', 'uses' => 'PrivilegeController@create']);
     $router->get('/edit/{id}', ['as' => 'privileges.edit', 'uses' => 'PrivilegeController@edit']);
-    $router->get('/{id}', ['as' => 'privileges.show', 'uses' => 'PrivilegeController@show']);
     $router->post('/store', ['as' => 'privileges.store', 'uses' => 'PrivilegeController@store']);
 });
 
 $router->group(['prefix' => 'privileges'], function () use ($router) {
+    $router->get('/{id}', ['as' => 'privileges.show', 'uses' => 'PrivilegeController@show']);
     $router->post('/server/{id}', 'PrivilegeController@server');
     $router->post('/{id}/terms', 'PrivilegeController@privilege');
 });
 
-$router->get('servers', 'ServerController@index');
-$router->get('servers/{id}', 'ServerController@show');
+$router->get('servers', ['as' => 'servers', 'uses' => 'ServerController@index']);
+$router->post('servers/store', [
+    'middleware' => ['auth', 'role:' . \App\Models\User::ROLE_ADMIN],
+    'as' => 'servers.store',
+    'uses' => 'ServerController@store'
+]);
+$router->get('servers/edit/{id}', [
+    'middleware' => ['auth', 'role:' . \App\Models\User::ROLE_ADMIN],
+    'as' => 'servers.edit',
+    'uses' => 'ServerController@edit'
+]);
+$router->get('servers/{id}', ['as' => 'server.show', 'uses' => 'ServerController@show']);
 
-$router->get('donations', ['as' => 'donations', 'uses' => 'SiteController@donations']);
+$router->get('donations', [
+    'middleware' => ['auth', 'role:' . \App\Models\User::ROLE_ADMIN],
+    'as' => 'donations',
+    'uses' => 'SiteController@donations'
+]);
 
-$router->get('migrate', 'SiteController@migrate');
+$router->get('settings', ['as' => 'settings', 'uses' => 'SettingsController@index']);
+//$router->get('migrate', 'SiteController@migrate');

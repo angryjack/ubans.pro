@@ -9,4 +9,10 @@ $(function () {
     });
 
     $('.select2-show-search ').select2();
+
+    let elements = $(document).find('textarea.editor');
+
+    elements.each(function (index, el) {
+        new SimpleMDE({element: el, spellChecker: false });
+    });
 });

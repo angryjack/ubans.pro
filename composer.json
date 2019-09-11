@@ -9,6 +9,7 @@
         "firebase/php-jwt": "^5.0",
         "illuminate/mail": "^5.8",
         "laravel/lumen-framework": "5.8.*",
+        "michelf/php-markdown": "^1.8",
         "unitpay/php-sdk": "^1.1",
         "xpaw/php-source-query-class": "^1.0"
     },

@@ -21,8 +21,11 @@
                                 <img src="https://image.gametracker.com/images/maps/160x120/cs/{{ $server->info['Map'] }}.jpg"
                                      width="120" height="120">
                                 <div class="media-body">
-                                    <h3 class="card-profile-name">{{ $server->hostname }}</h3>
-                                    <p>{{ $server->address }}</p>
+                                    <h3 class="card-profile-name">
+                                        <a class="text-dark" href="/servers/{{ $server->id }}">{{ $server->hostname }}</a>
+                                    </h3>
+                                    <p class="mb-1">{{ $server->address }}</p>
+                                    <b>Онлайн: {{ $server->info['Players'] }}/{{ $server->info['MaxPlayers'] }}</b>
                                 </div>
                             </div>
                         </div>
@@ -37,7 +40,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @foreach($server->players as $player)
+                                @forelse($server->players as $player)
                                     <div class="list-group-item">
                                         <div class="media">
                                             <div class="media-body ml-0 d-flex">
@@ -47,7 +50,15 @@
                                             </div>
                                         </div>
                                     </div>
-                                @endforeach
+                                @empty
+                                    <div class="list-group-item">
+                                        <div class="media">
+                                            <div class="media-body ml-0 d-flex">
+                                                <b>Игроков нет.</b>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforelse
                             </div>
                         </div>
                     </div>

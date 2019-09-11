@@ -103,6 +103,7 @@ $(function () {
     var $selectPrivilege = $('select[name="privilege"]');
     var $selectRate = $('select[name="rate"]');
     var $content = $('.content-body');
+    var $rules = $('.rules-body');
 
     // buy form
     $selectServer.on('select2:select', function (e) {
@@ -116,9 +117,10 @@ $(function () {
             method: 'post',
             url: '/privileges/server/' + server,
             success: function (response) {
-                $content.html(response.content);
+                $content.html(response.server.description);
+                $rules.html(response.server.rules);
                 let options = '<option selected disabled>Выберите услугу</option>';
-                response.privileges.forEach(function (item, i, arr) {
+                response.server.privileges.forEach(function (item, i, arr) {
                     options += '<option value="' + item.id + '">' + item.title + '</option>'
                 });
                 $selectPrivilege.html(options);

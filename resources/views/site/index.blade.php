@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Главная')
+@section('title', env('APP_NAME') . ' - Главная')
 
 @section('content')
     <div class="container">
@@ -31,13 +31,6 @@
                         <a href="{{ route('donations') }}" class="btn btn-primary btn-block">Поддержать</a>
                     </div>
                 </div>
-                @guest
-                    <div class="card card-info mt-3">
-                        <div class="card-body pd-40">
-                            <a href="//cs-dl777.ru" target="_blank" class="btn btn-primary btn-block">Скачать КС 1.6</a>
-                        </div>
-                    </div>
-                @endif
             </div>
             <div class="col-lg-8 mg-t-10 mg-lg-t-0 order-lg-2">
                 <div class="card card-quick-post">
