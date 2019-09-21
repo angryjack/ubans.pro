@@ -30,13 +30,10 @@
             'icon' => 'game-controller-b'
         ],
         [
-            'href' => 'settings',
-            'title' => 'Настройки',
+            'href' => 'privileges',
+            'title' => 'Привилегии',
             'icon' => 'gear',
             'role' => \App\Models\User::ROLE_ADMIN,
-            'sub' => [
-                'privileges' => 'Привилегии',
-            ]
         ],
     ];
 

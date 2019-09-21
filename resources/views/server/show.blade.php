@@ -37,7 +37,7 @@
                         <a href="steam://connect/{{ $model->address }}" class="nav-link">
                             <i class="icon ion-ios-game-controller-b tx-purple"></i>Подключиться</a>
                     </li>
-                    <li class="nav-item"><a href="{{ route('payment.privilege') }}" class="nav-link">
+                    <li class="nav-item"><a href="{{ route('privilege.buy') }}" class="nav-link">
                             <i class="icon ion-ios-pricetags tx-primary"></i>Купить привилегию</a>
                     </li>
                     <li class="nav-item"><a href="{{ route('donations') }}" class="nav-link">

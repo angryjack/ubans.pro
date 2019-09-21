@@ -53,11 +53,6 @@
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 <script type="text/javascript" src="https://vk.com/js/api/openapi.js?162"></script>
 
-<!-- VK Widget -->
-<div id="vk_community_messages"></div>
-<script type="text/javascript">
-    VK.Widgets.CommunityMessages("vk_community_messages", 71318793, {tooltipButtonText: "Есть вопрос?"});
-</script>
 
 </body>
 </html>

@@ -69,7 +69,7 @@
                                 <div class="card-body pd-40">
                                     <h5 class="tx-inverse mg-b-20">Услуги не найдены</h5>
                                     <p>Покупка привилегии способствует дальнейшему развитию проекта.</p>
-                                    <a href="{{ route('payment.privilege') }}"
+                                    <a href="{{ route('privilege.buy') }}"
                                        class="btn btn-primary btn-block">Купить</a>
                                 </div><!-- card -->
                             </div><!-- card -->
@@ -83,21 +83,7 @@
                     <div class="slim-card-title">Контакты проекта</div>
 
                     <div class="media-list mg-t-25">
-                        <div class="media">
-                            <div><i class="icon ion-link tx-24 lh-0"></i></div>
-                            <div class="media-body mg-l-15 mg-t-4">
-                                <h6 class="tx-14 tx-gray-700">Сайты</h6>
-                                <a href="//vk.com/sentryguns" class="d-block">vk.com/sentryguns</a>
-                                <a href="//steamcommunity.com/groups/sentryguns" class="d-block">steamcommunity.com</a>
-                            </div>
-                        </div>
-                        <div class="media mg-t-25">
-                            <div><i class="icon ion-ios-email-outline tx-24 lh-0"></i></div>
-                            <div class="media-body mg-l-15 mg-t-4">
-                                <h6 class="tx-14 tx-gray-700">Почта админа</h6>
-                                <span class="d-block">admin@sentryguns.ru</span>
-                            </div>
-                        </div>
+                        @include('custom.contacts')
                     </div>
                 </div>
 

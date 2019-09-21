@@ -4,10 +4,11 @@ namespace App\Services;
 
 use App\Models\Payment;
 use App\Models\PrivilegeRate;
-use Exception;
+use App\Services\Payment\PaymentInterface;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class PaymentService
@@ -22,20 +23,104 @@ class PaymentService
      */
     private $donationService;
 
+    /**
+     * @var PaymentInterface
+     */
+    private $payment;
+
     public function __construct()
     {
         $this->userService = app(UserService::class);
         $this->donationService = app(DonationService::class);
+        $this->payment = app(PaymentInterface::class);
     }
 
     /**
-     * Создает счет на покупку привилегии.
-     *§
+     * Возвращает ссылку для оплаты.
+     *
      * @param Request $request
      * @return string
      * @throws ValidationException
      */
-    public function buyPrivilege(Request $request): string
+    public function getUrl(Request $request): string
+    {
+        switch ($request->input('action')) {
+            case Payment::TYPE_PRIVILEGE:
+                return $this->buyPrivilegeOrder($request);
+                break;
+            case Payment::TYPE_DONATION:
+                return $this->donationOrder($request);
+                break;
+        }
+
+        abort(404);
+    }
+
+    /**
+     * Возвращает результат обработки платежа.
+     *
+     * @param Request $request
+     * @return string
+     */
+    public function handleRequest(Request $request)
+    {
+        $result = $this->payment->getPaymentResult($request);
+
+        if ($result->status === $result::STATE_PAY) {
+            switch ($result->payment->type) {
+                case Payment::TYPE_PRIVILEGE:
+                    $this->userService->addPrivilege($result->payment);
+                    break;
+                case Payment::TYPE_PROLONG:
+                    $this->userService->prolongPrivilege($result->payment);
+                    break;
+                case Payment::TYPE_DONATION:
+                    $this->donationService->addDonation($result->payment);
+                    break;
+            }
+        }
+
+        return $result->message;
+    }
+
+    /**
+     * @param Request $request
+     * @return View
+     */
+    public function getResultView(Request $request): View
+    {
+        $payment = $this->payment->getPaymentByRequest($request);
+
+        switch ($payment->type) {
+            case Payment::TYPE_PRIVILEGE:
+                $user = $this->userService->getUserByPayment($payment);
+
+                if (!isset($payment->data['show'])) {
+                    $data = $payment->data;
+                    $data['show'] = date('d.m.Y H:i');
+                    $payment->data = $data;
+                    $payment->save();
+                    return view('payment.results.buy', compact('user'));
+                }
+            case Payment::TYPE_PROLONG:
+                return view('payment.results.prolong');
+                break;
+            case Payment::TYPE_DONATION:
+                return view('payment.results.donation');
+                break;
+            default:
+                return redirect()->route('home');
+        }
+    }
+
+    /**
+     * Создает счет на покупку привилегии.
+     *
+     * @param Request $request
+     * @return string
+     * @throws ValidationException
+     */
+    private function buyPrivilegeOrder(Request $request): string
     {
         $this->userService->validateUserBeforePay($request);
 
@@ -54,7 +139,6 @@ class PaymentService
             $email = $user->email;
             $nickname = $user->nickname;
 
-            //todo проверка что пользователь не имеет других привилегий на этом сервере
             $activePrivilege = $user->servers()->where('id', $rate->privilege->server->id)->first();
             if ($activePrivilege) {
                 if ($activePrivilege->pivot->custom_flags !== $rate->privilege->flags) {
@@ -75,12 +159,7 @@ class PaymentService
             'privilege_rate_id' => $rate->id,
         ];
 
-        $payment = Payment::create([
-            'type' => $paymentType,
-            'data' => $data,
-            'amount' => $rate->price,
-            'account' => $accountPrefix . '-' . Str::random(9),
-        ]);
+        $payment = $this->createPayment($paymentType, $data, $rate->price, $accountPrefix);
 
         if ($paymentType === Payment::TYPE_PRIVILEGE) {
             $message = 'Покупка привилегии на ' . env('APP_NAME');
@@ -88,7 +167,7 @@ class PaymentService
             $message = 'Продление привилегии на ' . env('APP_NAME');
         }
 
-        return $this->getPaymentUrl($payment, $message);
+        return $this->payment->getUrl($payment, $message);
     }
 
     /**
@@ -97,7 +176,7 @@ class PaymentService
      * @param Request $request
      * @return string
      */
-    public function makeDonation(Request $request)
+    private function donationOrder(Request $request)
     {
         $amount = (int)$request->input('amount');
 
@@ -114,133 +193,22 @@ class PaymentService
             'amount' => $amount,
         ];
 
+        $payment = $this->createPayment(Payment::TYPE_DONATION, $data, $amount, 'DONATION');
+
+        $message = 'Пожертвование для ' . env('APP_NAME');
+
+        return $this->payment->getUrl($payment, $message);
+    }
+
+    private function createPayment(string $type, array $data, int $amount, string $prefix): Payment
+    {
         $payment = Payment::create([
             'type' => Payment::TYPE_DONATION,
             'data' => $data,
             'amount' => $amount,
-            'account' => 'DONATION-' . Str::random(9),
+            'account' => $prefix . '-' . Str::random(9),
         ]);
 
-        $message = 'Пожертвование для ' . env('APP_NAME');
-
-        return $this->getPaymentUrl($payment, $message);
-    }
-
-    /**
-     * Обрабатывает ответ платежной системы.
-     *
-     * @param Request $request
-     * @return string
-     * @throws Exception
-     */
-    public function handleUnitpayRequest(Request $request)
-    {
-        $method = $request->input('method');
-        $params = $request->input('params');
-        $account = $params['account'];
-
-        $payment = Payment::where('account', $account)->firstOrFail();
-        if ($payment->status === Payment::STATUS_PAY) {
-            return 'Оплата прошла успешно.';
-        }
-
-        $response = '';
-        switch ($method) {
-            case 'check':
-                $this->checkOrderData($payment, $params);
-                $payment->payment_id = $params['unitpayId'];
-                $payment->status = Payment::STATUS_CHECK;
-                $response = 'Проверка прошла успешно. Мы готовы принять Вашу оплату.';
-                break;
-            case 'pay':
-                $payment->status = Payment::STATUS_PAY;
-
-                switch ($payment->type) {
-                    case Payment::TYPE_PRIVILEGE:
-                        $this->userService->addPrivilege($payment);
-                        break;
-                    //case Payment::TYPE_EXTEND:
-                    case Payment::TYPE_PROLONG:
-                        $this->userService->prolongPrivilege($payment);
-                        break;
-                    case Payment::TYPE_DONATION:
-                        $this->donationService->addDonation($payment);
-                        break;
-                }
-                $response = 'Оплата произведена. Большое спасибо!';
-                break;
-            case 'error':
-                $payment->status = Payment::STATUS_ERROR;
-                $response = 'Произошла ошибка.';
-                break;
-        }
-        $payment->save();
-
-        return $response;
-    }
-
-    /**
-     * Возвращает ссылку для оплаты.
-     *
-     * @param Payment $payment
-     * @param $message
-     * @return string
-     */
-    public function getPaymentUrl(Payment $payment, $message): string
-    {
-        return 'https://unitpay.ru/pay/' . env('UNITPAY_PUBLIC_KEY') .
-            '?sum=' . $payment->amount .
-            '&account=' . $payment->account .
-            '&desc=' . $message .
-            '&signature=' . $this->getFormSignature($payment, $message);
-    }
-
-    /**
-     * Возвращает платеж по идентификатору и акаунту.
-     *
-     * @param Request $request
-     * @return mixed
-     */
-    public function getPaymentByIdAndAccount(Request $request)
-    {
-        return Payment::where([
-            ['payment_id', $request->input('paymentId')],
-            ['account', $request->input('account')],
-        ])->firstOrFail();
-    }
-
-    /**
-     * Проверяет корректность данных заказа.
-     *
-     * @param Payment $payment
-     * @param array $params
-     * @throws Exception
-     */
-    private function checkOrderData(Payment $payment, array $params)
-    {
-        if ($payment->status === Payment::STATUS_CHECK) {
-            if ($params['orderSum'] !== $payment->amount ||
-                $params['account'] !== $payment->account ||
-                $params['orderCurrency'] !== env('UNITPAY_CURRENCY') ||
-                $params['projectId'] !== env('UNITPAY_PROJECT_ID')) {
-                throw new Exception('Order validation Error!');
-            }
-        }
-    }
-
-    /**
-     * Создает цифровую подпись.
-     *
-     * @param Payment $payment
-     * @param $message
-     * @return string
-     */
-    private function getFormSignature(Payment $payment, $message)
-    {
-        $hashStr = $payment->account . '{up}' .
-            $message . '{up}' .
-            $payment->amount . '{up}' .
-            env('UNITPAY_SECRET_KEY');
-        return hash('sha256', $hashStr);
+        return $payment;
     }
 }

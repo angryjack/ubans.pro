@@ -5,17 +5,19 @@ namespace App\Services;
 use App\Models\Ban;
 use Illuminate\Http\Request;
 
-class BanService
+class BanServiceTest
 {
     public function search(Request $request)
     {
         $search = $request->input('search');
 
-        $list = Ban::when($search, function ($query, $search) {
-            $query->where('player_nick', 'like', "%$search%")
-                ->orWhere('player_id', 'like', "%$search%")
-                ->orWhere('player_ip', 'like', "%$search%");
-        })
+        $list = Ban
+            ::when($search, function ($query, $search) {
+                return $query
+                    ->where('player_nick', 'like', "%$search%")
+                    ->orWhere('player_id', 'like', "%$search%")
+                    ->orWhere('player_ip', 'like', "%$search%");
+            })
             ->orderBy('bid', 'desc')->paginate(50);
 
         return $list;
@@ -28,7 +30,9 @@ class BanService
 
     public function update(Ban $model, Request $request)
     {
+        //todo validate
         $ban_length = (int)$request->input('ban_length');
+
         $ban_reason = $request->input('ban_reason');
 
         if ($ban_length !== -1 && $ban_length !== 0) {

@@ -18,7 +18,7 @@ class UserForm
 
         $serverService = app()->make(ServerService::class);
 
-        $this->servers = $serverService->getWithPrivileges();
+        $this->servers = $serverService->getAllWithPrivileges();
 
         if ($user) {
             $user->password = '';

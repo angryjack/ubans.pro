@@ -14,6 +14,7 @@
         </div>
         <div class="row row-sm">
             <div class="col-lg-8">
+
                 <div class="card-recommendation" id="about">
                     <div class="card">
                         <div class="card-body">
@@ -28,27 +29,32 @@
                     </div>
                 </div>
 
-                <div class="card-recommendation mt-4" id="instruction">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-profile-name">Инструкции</h3>
-                            <hr>
-                            <p class="mg-b-0">{!! Michelf\Markdown::defaultTransform($model->instruction) !!}</p>
+                @if(!empty($model->instruction))
+                    <div class="card-recommendation mt-4" id="instruction">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 class="card-profile-name">Инструкции</h3>
+                                <hr>
+                                <p class="mg-b-0">{!! Michelf\Markdown::defaultTransform($model->instruction) !!}</p>
 
-                        </div><!-- card-body -->
+                            </div><!-- card-body -->
+                        </div>
                     </div>
-                </div>
+                @endif
 
-                <div class="card-recommendation mt-4" id="rules">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-profile-name">Правила игры на сервере {{ $model->server->hostname }}</h3>
-                            <hr>
-                            <p class="mg-b-0">{!! Michelf\Markdown::defaultTransform($model->server->rules) !!}</p>
+                @if(!empty($model->server->rules))
+                    <div class="card-recommendation mt-4" id="rules">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 class="card-profile-name">Правила игры на
+                                    сервере {{ $model->server->hostname }}</h3>
+                                <hr>
+                                <p class="mg-b-0">{!! Michelf\Markdown::defaultTransform($model->server->rules) !!}</p>
 
-                        </div><!-- card-body -->
+                            </div><!-- card-body -->
+                        </div>
                     </div>
-                </div>
+                @endif
             </div><!-- col-8 -->
 
             <div class="col-lg-4 mg-t-20 mg-lg-t-0">

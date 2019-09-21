@@ -8,7 +8,7 @@
             <h6 class="slim-pagetitle mr-auto">Ваши пожертвования</h6>
         </div>
         <div class="card-columns mg-t-20">
-            <form class="card card-body pd-25" action="{{ route('payment.donation') }}" method="post">
+            <form class="card card-body pd-25" action="{{ route('donations') }}" method="post">
                 <h6 class="slim-card-title mg-b-20">Поддежрать проект</h6>
                 <div class="form-group">
                     <input type="text" name="title" class="form-control" placeholder="Ваше имя">

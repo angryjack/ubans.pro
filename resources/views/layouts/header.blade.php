@@ -25,7 +25,6 @@
                             <a href="{{ route('signout') }}" class="nav-link"><i class="icon ion-forward"></i>Выйти</a>
                         @else
                             <a href="{{ route('signin') }}" class="nav-link"><i class="icon ion-log-in"></i>Войти</a>
-                            <a href="{{ route('signup') }}" class="nav-link"><i class="icon ion-person-add"></i>Зарегистрироваться</a>
                         @endif
                     </nav>
                 </div><!-- dropdown-menu -->

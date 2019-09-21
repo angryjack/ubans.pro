@@ -37,11 +37,6 @@ class PrivilegeService
         return $server->privileges()->where('status', 1)->get();
     }
 
-    public function getRates(Privilege $privilege)
-    {
-        return $privilege->rates;
-    }
-
     public function store(Request $request)
     {
         $validationRules = [

@@ -46,6 +46,11 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
+$app->bind(
+    \App\Services\Payment\PaymentInterface::class,
+    \App\Services\Payment\Faker::class
+);
+
 /*
 |--------------------------------------------------------------------------
 | Register Middleware

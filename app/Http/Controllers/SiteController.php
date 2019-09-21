@@ -6,6 +6,7 @@ use App\Services\DonationService;
 use App\Services\SiteService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Laravel\Lumen\Routing\Controller;
 
 class SiteController extends Controller
 {
@@ -13,6 +14,7 @@ class SiteController extends Controller
      * @var SiteService
      */
     private $siteService;
+
     /**
      * @var DonationService
      */
@@ -71,6 +73,7 @@ class SiteController extends Controller
 
     public function migrate()
     {
+        return;
         if (env('APP_DEBUG')) {
             Artisan::call('migrate:fresh --seed');
             die('Операция успешно выполнена.');

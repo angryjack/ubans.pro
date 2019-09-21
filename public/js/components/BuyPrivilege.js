@@ -67,7 +67,7 @@ $(function () {
 
             $.ajax({
                 method: 'post',
-                url: '/payment/go/privilege',
+                url: '/payment/redirect',
                 data: {
                     server: server,
                     privilege: privilege,
@@ -76,7 +76,7 @@ $(function () {
                     email: email
                 },
                 success: (response) => {
-                    window.location.href = response.url;
+                    //window.location.href = response.url;
                 },
                 error: (response) => {
                     if (response.responseJSON.email) {

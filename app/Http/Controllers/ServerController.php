@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\ServerService;
 use Illuminate\Http\Request;
+use Laravel\Lumen\Routing\Controller;
 
 class ServerController extends Controller
 {

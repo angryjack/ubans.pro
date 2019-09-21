@@ -6,6 +6,8 @@ use App\Models\Privilege;
 use App\Services\PrivilegeService;
 use App\Services\ServerService;
 use Illuminate\Http\Request;
+use Michelf\Markdown;
+use Laravel\Lumen\Routing\Controller;
 
 class PrivilegeController extends Controller
 {
@@ -56,9 +58,17 @@ class PrivilegeController extends Controller
         return redirect()->route('privileges.show', ['id' => $model->id]);
     }
 
+    public function buy()
+    {
+        $servers = $this->serverService->getAllWithPrivileges();
+        return view('privilege.buy', compact('servers'));
+    }
+
     public function server($id)
     {
         $server = $this->serverService->getByIdWithPrivileges($id);
+        //fixme
+        $server->description = Markdown::defaultTransform($server->description);
         return response()->json(compact('server'));
     }
 
@@ -66,8 +76,9 @@ class PrivilegeController extends Controller
     {
         //todo выпилить, обрабатывать на фронте пришедшую ранее информацию.
         $privilege = $this->privilegeService->getById($id);
-        $content = $privilege->description;
-        $terms = $this->privilegeService->getRates($privilege);
+        //fixme
+        $content = Markdown::defaultTransform($privilege->description);
+        $terms = $privilege->rates;
 
         return response()->json(['terms' => $terms, 'content' => $content]);
     }

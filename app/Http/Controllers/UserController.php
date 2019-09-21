@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\UserForm;
 use App\Services\UserService;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Laravel\Lumen\Routing\Controller;
 
 class UserController extends Controller
 {
@@ -56,21 +56,5 @@ class UserController extends Controller
         $this->userService->delete($model);
 
         return redirect()->route('users');
-    }
-
-    public function profile()
-    {
-        $model = $this->userService->getUserByAuth();
-        if ($model === null) {
-            throw new NotFoundHttpException('Необходимо авторизоваться.');
-        }
-
-        return view('profile.show', compact('model'));
-    }
-
-    public function updateProfile(Request $request)
-    {
-        $model = $this->userService->updateProfile($request);
-        return view('profile.show', compact('model'));
     }
 }
