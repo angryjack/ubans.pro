@@ -18,8 +18,12 @@
                     <div class="card card-profile">
                         <div class="card-body">
                             <div class="media">
-                                <img src="https://image.gametracker.com/images/maps/160x120/cs/{{ $server->info['Map'] }}.jpg"
+                                @if ($server->info['Map'] === 'nomap')
+									<img src="{{URL::asset('images/nomap.jpg')}}" width="120" height="120">
+								@else
+									<img src="https://image.gametracker.com/images/maps/160x120/cs/{{ $server->info['Map'] }}.jpg"
                                      width="120" height="120">
+								@endif
                                 <div class="media-body">
                                     <h3 class="card-profile-name">
                                         <a class="text-dark" href="/servers/{{ $server->id }}">{{ $server->hostname }}</a>

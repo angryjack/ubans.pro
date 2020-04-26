@@ -137,15 +137,24 @@ class ServerService
                 $this->getServerIp($server),
                 $this->getPort($server),
                 1,
-                $this->sourceQuery::GOLDSOURCE
+                $this->sourceQuery::SOURCE
             );
             $info = $this->sourceQuery->GetInfo();
             $players = $this->sourceQuery->GetPlayers();
         } catch (Exception $e) {
-            // игнорируем ошибки
+            // игнорируем ошибки ?? I tried putting it here but not work
         } finally {
             $this->sourceQuery->Disconnect();
         }
+		
+		if(!$info)
+		{
+			$info['Map'] = "nomap";
+			$info['Players'] = "0";
+			$info['MaxPlayers'] = "0";
+			$players = (array) null;
+		}
+		
         return ['info' => $info, 'players' => $players];
     }
 

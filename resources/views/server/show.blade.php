@@ -18,9 +18,12 @@
                 <div class="card card-profile">
                     <div class="card-body">
                         <div class="media">
-                            <img
-                                src="https://image.gametracker.com/images/maps/160x120/cs/{{ $model->info['Map'] }}.jpg"
-                                width="120" height="120">
+                            @if ($model->info['Map'] === 'nomap')
+								<img src="{{URL::asset('images/nomap.jpg')}}" width="120" height="120">
+							@else
+								<img src="https://image.gametracker.com/images/maps/160x120/cs/{{ $model->info['Map'] }}.jpg"
+								 width="120" height="120">
+							@endif
                             <div class="media-body">
                                 <h3 class="card-profile-name">{{ $model->hostname }}</h3>
                                 <p class="card-profile-position">{{ $model->address }}</p>
