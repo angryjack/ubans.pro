@@ -12,9 +12,9 @@ $router->get('signout', ['as' => 'signout', 'uses' => 'SiteController@signout'])
 
 // профиль
 $router->group(['prefix' => 'profile'], function () use ($router) {
-    $router->get('/', ['as' => 'profile', 'middleware' => 'auth', 'uses' => 'UserController@profile']);
+    $router->get('/', ['as' => 'profile', 'middleware' => 'auth', 'uses' => 'ProfileController@profile']);
     $router->get('/auth', 'SiteController@auth');
-    $router->post('/update', ['as' => 'profile.update', 'middleware' => 'auth', 'uses' => 'UserController@updateProfile']);
+    $router->post('/update', ['as' => 'profile.update', 'middleware' => 'auth', 'uses' => 'ProfileController@updateProfile']);
 });
 
 // оплата
