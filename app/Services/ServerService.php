@@ -152,7 +152,7 @@ class ServerService
 			$info['Map'] = "nomap";
 			$info['Players'] = "0";
 			$info['MaxPlayers'] = "0";
-			$players = (array) null;
+			$players = [];
 		}
 		
         return ['info' => $info, 'players' => $players];
