@@ -14,7 +14,7 @@
                     <input type="text" name="title" class="form-control" placeholder="Ваше имя">
                 </div>
                 <div class="form-group">
-                    <input type="number" name="amount" class="form-control" placeholder="Сумма" value="250">
+                    <input type="number" name="amount" class="form-control" placeholder="Сумма" min="1" value="250">
                 </div>
                 <div class="form-group">
                     <textarea name="message" class="form-control" rows="2" placeholder="Ваше сообщение"></textarea>
